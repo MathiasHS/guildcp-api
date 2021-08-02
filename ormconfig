@@ -1,0 +1,24 @@
+module.exports = {
+    "type": "mysql",
+    "host": "",
+    "port": ,
+    "username": "",
+    "password": "",
+    "database": "",
+    "synchronize": false,
+    "logging": false,
+    "entities": [
+        `${process.env.NODE_ENV !== 'PRODUCTION' ? 'src/entity/**/*.ts' : 'build/entity/**/*.js'}`
+    ],
+    "migrations": [
+        "src/migration/**/*.ts"
+    ],
+    "subscribers": [
+        "src/subscriber/**/*.ts"
+    ],
+    "cli": {
+        "entitiesDir": "src/entity",
+        "migrationsDir": "src/migration",
+        "subscribersDir": "src/subscriber"
+    }
+};

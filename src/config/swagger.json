@@ -1,0 +1,396 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0"
+    },
+    "host": "gcpapi.cxdur.xyz",
+    "basePath": "/internal",
+    "schemes": ["https", "http"],
+    "produces": ["application/json"],
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Login with GCP credentials and a receive JWT token.",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "content": {
+                    "application/json": {}
+                },
+                "parameters": [{
+                    "name": "Credentials",
+                    "in": "body",
+                    "description": "Login credentials",
+                    "required": true,
+                    "schema": {
+                        "type": "object",
+                        "required": [
+                            "username",
+                            "password"
+                        ],
+                        "properties": {
+                            "username": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }]
+            }
+        },
+        "/auth/change-password": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Change password with JWT token, previous and new password.",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "204": {
+                        "description": "OK"
+                    }
+                },
+                "content": {
+                    "application/json": {}
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    },
+                    {
+                        "name": "Credentials",
+                        "in": "body",
+                        "description": "Old password to change, new password to set",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "oldPassword",
+                                "newPassword"
+                            ],
+                            "properties": {
+                                "oldPassword": {
+                                    "type": "string"
+                                },
+                                "newPassword": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/user/self/": {
+            "get": {
+                "tags": ["user"],
+                "summary": "Get your info",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        "/user/self": {
+            "patch": {
+                "tags": ["user"],
+                "summary": "Update your user settings",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    },
+                    {
+                        "name": "Credentials",
+                        "in": "body",
+                        "description": "User settings (1 for true, 0 for false)",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "visible",
+                                "showEmail",
+                                "showBattleTag"
+                            ],
+                            "properties": {
+                                "visible": {
+                                    "type": "integer"
+                                },
+                                "showEmail": {
+                                    "type": "integer"
+                                },
+                                "showBattleTag": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/user/guilds/": {
+            "get": {
+                "tags": ["user"],
+                "summary": "Get guilds that you have permission to see",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        "/user/event/{id}/": {
+            "put": {
+                "tags": ["user"],
+                "summary": "Accept/decline an event invite",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true,
+                        "description": "Numeric ID of the Event"
+                    },
+                    {
+                        "name": "Credentials",
+                        "in": "body",
+                        "description": "Attending value (1 for accept, 0 for decline)",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "attending"
+                            ],
+                            "properties": {
+                                "attending": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/user/events/": {
+            "get": {
+                "tags": ["user"],
+                "summary": "Get events that you have permission to see",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        "/user/events/statistics": {
+            "get": {
+                "tags": ["user"],
+                "summary": "Get personal event statistics",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        "/guild/{id}/": {
+            "get": {
+                "tags": ["guild"],
+                "summary": "Get a guild by ID",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": "true",
+                        "schema":{
+                            "type": "integer"
+                        },
+                        "description": "Numeric ID of the Guild to get"
+                    }
+                ]
+            }
+        },
+        "/guild/{id}/members": {
+            "get": {
+                "tags": ["guild"],
+                "summary": "Get the members of a guild by ID",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": "true",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Numeric ID of the Guild"
+                    }
+                ]
+            
+            }
+        },
+        "/guild/{id}/events": {
+            "get": {
+                "tags": ["guild"],
+                "summary": "Get the members of a guild by ID",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "parameters": [{
+                        "name": "auth",
+                        "in": "header",
+                        "description": "Authorization token",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": "true",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Numeric ID of the Guild"
+                    }
+                ]
+            }
+        }
+    }
+}
