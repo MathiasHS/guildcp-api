@@ -6,6 +6,7 @@ This was created purely for educational reasons as an API was required for a uni
 ## Credits
 ```
 https://github.com/datamus - Project member
+https://github.com/sondrekje - Project member
 ```
 
 ## Repository status
